@@ -1,124 +1,274 @@
-html
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Transformación de Señales x(t)</title>
+    <title>Transformación Interactiva de Señales</title>
 
-<!-- Plotly -->
-<script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
+    <!-- Plotly -->
+    <script src="https://cdn.plot.ly/plotly-2.35.2.min.js"></script>
 
-<style>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-body{
-    font-family: Arial, sans-serif;
-    margin:20px;
-}
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f4f6f8;
+            color: #222;
+        }
 
-.container{
-    display:flex;
-    gap:20px;
-}
+        h1 {
+            text-align: center;
+            margin-bottom: 25px;
+        }
 
-.panel{
-    width:250px;
-    border:1px solid #ccc;
-    padding:15px;
-    border-radius:10px;
-}
+        .container {
+            display: flex;
+            gap: 20px;
+            max-width: 1400px;
+            margin: auto;
+        }
 
-#grafica{
-    flex:1;
-    height:600px;
-}
+        /* ==============================
+           PANEL DE CONTROLES
+           ============================== */
 
-label{
-    display:block;
-    margin-top:10px;
-}
+        .panel {
+            width: 280px;
+            background: white;
+            border: 1px solid #d5d5d5;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
 
-.ecuacion{
-    margin-top:20px;
-    font-size:20px;
-    font-weight:bold;
-}
+        .panel h2 {
+            margin-top: 0;
+        }
 
-</style>
+        .control {
+            margin-bottom: 25px;
+        }
 
+        .control-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            cursor: pointer;
+        }
+
+        .valor {
+            font-weight: bold;
+            color: #0066cc;
+        }
+
+        /* ==============================
+           ECUACIÓN
+           ============================== */
+
+        .ecuacion {
+            margin-top: 20px;
+            padding: 15px;
+            background: #eef5ff;
+            border-left: 4px solid #0066cc;
+            border-radius: 6px;
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* ==============================
+           GRÁFICA
+           ============================== */
+
+        #grafica {
+            flex: 1;
+            min-height: 600px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.08);
+        }
+
+        /* ==============================
+           INFORMACIÓN
+           ============================== */
+
+        .info {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .info p {
+            margin: 7px 0;
+        }
+
+        /* ==============================
+           RESPONSIVE
+           ============================== */
+
+        @media (max-width: 800px) {
+
+            .container {
+                flex-direction: column;
+            }
+
+            .panel {
+                width: 100%;
+            }
+
+            #grafica {
+                min-height: 500px;
+            }
+        }
+
+    </style>
 </head>
+
 
 <body>
 
-<h2>Transformación Interactiva de Señales</h2>
+<h1>Transformación Interactiva de Señales</h1>
+
 
 <div class="container">
 
+    <!-- ==========================================
+         PANEL DE CONTROLES
+         ========================================== -->
+
     <div class="panel">
 
-        <h3>Controles</h3>
+        <h2>Controles</h2>
+
 
         <!-- TRASLACIÓN -->
 
-        <label>
-            <input type="checkbox" id="tras">
-            Activar traslación
-        </label>
+        <div class="control">
 
-        <label>
-            k =
-            <span id="valorK">0</span>
-        </label>
+            <div class="control-title">
+                Traslación temporal
+            </div>
 
-        <input
-            type="range"
-            id="sliderK"
-            min="-5"
-            max="5"
-            step="0.1"
-            value="0"
-        >
+            <label>
+                <input type="checkbox" id="tras">
+                Activar traslación
+            </label>
 
-        <br><br>
+            <label>
+                k =
+                <span class="valor" id="valorK">0.00</span>
+            </label>
+
+            <input
+                type="range"
+                id="sliderK"
+                min="-5"
+                max="5"
+                step="0.1"
+                value="0"
+            >
+
+        </div>
+
 
         <!-- REFLEXIÓN -->
 
-        <label>
-            <input type="checkbox" id="ref">
-            Activar reflexión
-        </label>
+        <div class="control">
 
-        <br>
+            <div class="control-title">
+                Reflexión temporal
+            </div>
+
+            <label>
+                <input type="checkbox" id="ref">
+                Activar reflexión
+            </label>
+
+        </div>
+
 
         <!-- ESCALAMIENTO -->
 
-        <label>
-            <input type="checkbox" id="esc">
-            Activar escalamiento
-        </label>
+        <div class="control">
 
-        <label>
-            a =
-            <span id="valorA">1</span>
-        </label>
+            <div class="control-title">
+                Escalamiento temporal
+            </div>
 
-        <input
-            type="range"
-            id="sliderA"
-            min="0.333"
-            max="3"
-            step="0.01"
-            value="1"
-        >
+            <label>
+                <input type="checkbox" id="esc">
+                Activar escalamiento
+            </label>
+
+            <label>
+                a =
+                <span class="valor" id="valorA">1.00</span>
+            </label>
+
+            <input
+                type="range"
+                id="sliderA"
+                min="0.333"
+                max="3"
+                step="0.01"
+                value="1"
+            >
+
+        </div>
+
+
+        <!-- ECUACIÓN -->
 
         <div class="ecuacion" id="ecuacion">
-            y(t)=x(t)
+            y(t) = x(t)
         </div>
 
     </div>
 
+
+    <!-- ==========================================
+         GRÁFICA
+         ========================================== -->
+
     <div id="grafica"></div>
+
+</div>
+
+
+<!-- ==============================================
+     INFORMACIÓN
+     ============================================== -->
+
+<div class="info">
+
+    <p>
+        <strong>Señal original:</strong> x(t)
+    </p>
+
+    <p>
+        <strong>Señal transformada:</strong> y(t)
+    </p>
+
+    <p>
+        <strong>Transformación general:</strong>
+        y(t) = x[±a(t-k)]
+    </p>
 
 </div>
 
@@ -129,9 +279,9 @@ label{
 // VECTOR DE TIEMPO
 // =====================================================
 
-let t = [];
+const t = [];
 
-for(let x=-22; x<=22; x+=0.05){
+for (let x = -22; x <= 22; x += 0.05) {
     t.push(x);
 }
 
@@ -140,18 +290,18 @@ for(let x=-22; x<=22; x+=0.05){
 // SEÑAL ORIGINAL x(t)
 // =====================================================
 
-function xf(t){
+function xf(t) {
 
-    if(t>=-5 && t<-3)
+    if (t >= -5 && t < -3)
         return 1;
 
-    if(t>=-3 && t<-1)
+    if (t >= -3 && t < -1)
         return 2;
 
-    if(t>=-1 && t<2)
+    if (t >= -1 && t < 2)
         return 1.5;
 
-    if(t>=2 && t<4)
+    if (t >= 2 && t < 4)
         return 0.5;
 
     return 0;
@@ -162,19 +312,19 @@ function xf(t){
 // FUNCIÓN PRINCIPAL
 // =====================================================
 
-function actualizar(){
+function actualizar() {
 
     // ---------------------------------------------
-    // Leer controles
+    // LEER CONTROLES
     // ---------------------------------------------
 
-    let usarTras =
+    const usarTras =
         document.getElementById("tras").checked;
 
-    let usarRef =
+    const usarRef =
         document.getElementById("ref").checked;
 
-    let usarEsc =
+    const usarEsc =
         document.getElementById("esc").checked;
 
 
@@ -190,59 +340,62 @@ function actualizar(){
         );
 
 
-    // Mostrar valores
+    // ---------------------------------------------
+    // MOSTRAR VALORES
+    // ---------------------------------------------
 
-    document.getElementById("valorK").innerHTML =
+    document.getElementById("valorK").textContent =
         k.toFixed(2);
 
-    document.getElementById("valorA").innerHTML =
+    document.getElementById("valorA").textContent =
         a.toFixed(2);
 
 
     // ---------------------------------------------
-    // Desactivar transformaciones
+    // DESACTIVAR TRANSFORMACIONES
     // ---------------------------------------------
 
-    if(!usarTras)
+    if (!usarTras)
         k = 0;
 
-    if(!usarEsc)
+    if (!usarEsc)
         a = 1;
 
 
     // ---------------------------------------------
-    // Reflexión
+    // REFLEXIÓN
     // ---------------------------------------------
 
     let signo = 1;
 
-    if(usarRef)
+    if (usarRef)
         signo = -1;
 
 
     // ---------------------------------------------
-    // Crear señales
+    // CREAR SEÑALES
     // ---------------------------------------------
 
-    let y = [];
-    let original = [];
+    const y = [];
+    const original = [];
 
 
-    for(let i=0; i<t.length; i++){
+    for (let i = 0; i < t.length; i++) {
 
         // Señal original
+
         original.push(
             xf(t[i])
         );
 
 
-        // Argumento de x(...)
-        //
-        // y(t) = x[ signo * a * (t-k) ]
+        // Argumento de x
 
-        let argumento =
+        const argumento =
             signo * a * (t[i] - k);
 
+
+        // Señal transformada
 
         y.push(
             xf(argumento)
@@ -252,72 +405,114 @@ function actualizar(){
 
 
     // =====================================================
-    // GRAFICAR
+    // CONFIGURACIÓN DE LA GRÁFICA
     // =====================================================
 
-    Plotly.newPlot(
-        "grafica",
+    const datos = [
 
-        [
-
-            // ---------------------------------------------
-            // SEÑAL TRANSFORMADA
-            // ---------------------------------------------
-
-            {
-                x:t,
-                y:y,
-                mode:"lines",
-
-                name:"Transformada",
-
-                line:{
-                    width:3,
-                    color:"blue"
-                }
-            },
-
-
-            // ---------------------------------------------
-            // SEÑAL ORIGINAL
-            // ---------------------------------------------
-
-            {
-                x:t,
-                y:original,
-                mode:"lines",
-
-                name:"Original",
-
-                line:{
-                    dash:"dash",
-                    color:"red"
-                }
-            }
-
-        ],
+        // ---------------------------------------------
+        // TRANSFORMADA
+        // ---------------------------------------------
 
         {
+            x: t,
+            y: y,
 
-            title:"Transformación interactiva de x(t)",
+            mode: "lines",
 
-            xaxis:{
-                title:"Tiempo [s]",
-                range:[-22,22]
-            },
+            name: "Transformada",
 
-            yaxis:{
-                title:"Amplitud",
-                range:[-0.5,2.5]
-            },
-
-            legend:{
-                x:0.02,
-                y:0.98
+            line: {
+                width: 3,
+                color: "#0066cc"
             }
+        },
 
+
+        // ---------------------------------------------
+        // ORIGINAL
+        // ---------------------------------------------
+
+        {
+            x: t,
+            y: original,
+
+            mode: "lines",
+
+            name: "Original",
+
+            line: {
+                width: 2,
+                dash: "dash",
+                color: "#cc3333"
+            }
         }
 
+    ];
+
+
+    const layout = {
+
+        title: {
+            text: "Transformación interactiva de x(t)"
+        },
+
+        xaxis: {
+            title: "Tiempo [s]",
+            range: [-22, 22],
+            zeroline: true,
+            gridcolor: "#dddddd"
+        },
+
+        yaxis: {
+            title: "Amplitud",
+            range: [-0.5, 2.5],
+            zeroline: true,
+            gridcolor: "#dddddd"
+        },
+
+        legend: {
+            x: 0.02,
+            y: 0.98
+        },
+
+        margin: {
+            l: 70,
+            r: 30,
+            t: 60,
+            b: 60
+        },
+
+        hovermode: "x unified",
+
+        paper_bgcolor: "white",
+        plot_bgcolor: "white"
+    };
+
+
+    const config = {
+
+        responsive: true,
+
+        displaylogo: false,
+
+        modeBarButtonsToRemove: [
+            "lasso2d",
+            "select2d"
+        ]
+
+    };
+
+
+    // =====================================================
+    // DIBUJAR
+    // =====================================================
+
+    Plotly.react(
+        "grafica",
+        datos,
+        layout,
+        config
     );
 
 
@@ -329,17 +524,17 @@ function actualizar(){
 
 
     // ---------------------------------------------
-    // Traslación
+    // TRASLACIÓN
     // ---------------------------------------------
 
-    if(usarTras){
+    if (usarTras) {
 
-        if(k >= 0){
+        if (k >= 0) {
 
             texto =
                 `(t-${k.toFixed(2)})`;
 
-        }else{
+        } else {
 
             texto =
                 `(t+${Math.abs(k).toFixed(2)})`;
@@ -350,13 +545,13 @@ function actualizar(){
 
 
     // ---------------------------------------------
-    // Escalamiento temporal
+    // ESCALAMIENTO
     // ---------------------------------------------
 
-    if(
+    if (
         usarEsc &&
-        Math.abs(a-1)>0.001
-    ){
+        Math.abs(a - 1) > 0.001
+    ) {
 
         texto =
             `${a.toFixed(2)}${texto}`;
@@ -365,10 +560,10 @@ function actualizar(){
 
 
     // ---------------------------------------------
-    // Reflexión
+    // REFLEXIÓN
     // ---------------------------------------------
 
-    if(usarRef){
+    if (usarRef) {
 
         texto =
             `-${texto}`;
@@ -377,11 +572,11 @@ function actualizar(){
 
 
     // ---------------------------------------------
-    // Mostrar ecuación
+    // MOSTRAR ECUACIÓN
     // ---------------------------------------------
 
-    document.getElementById("ecuacion").innerHTML =
-        `y(t)=x(${texto})`;
+    document.getElementById("ecuacion").textContent =
+        `y(t) = x(${texto})`;
 
 }
 
@@ -390,43 +585,48 @@ function actualizar(){
 // EVENTOS
 // =====================================================
 
-document.getElementById("tras")
-.addEventListener(
-    "change",
-    actualizar
-);
+document
+    .getElementById("tras")
+    .addEventListener(
+        "change",
+        actualizar
+    );
 
 
-document.getElementById("ref")
-.addEventListener(
-    "change",
-    actualizar
-);
+document
+    .getElementById("ref")
+    .addEventListener(
+        "change",
+        actualizar
+    );
 
 
-document.getElementById("esc")
-.addEventListener(
-    "change",
-    actualizar
-);
+document
+    .getElementById("esc")
+    .addEventListener(
+        "change",
+        actualizar
+    );
 
 
-document.getElementById("sliderK")
-.addEventListener(
-    "input",
-    actualizar
-);
+document
+    .getElementById("sliderK")
+    .addEventListener(
+        "input",
+        actualizar
+    );
 
 
-document.getElementById("sliderA")
-.addEventListener(
-    "input",
-    actualizar
-);
+document
+    .getElementById("sliderA")
+    .addEventListener(
+        "input",
+        actualizar
+    );
 
 
 // =====================================================
-// INICIAR
+// INICIALIZAR
 // =====================================================
 
 actualizar();
@@ -435,4 +635,3 @@ actualizar();
 
 </body>
 </html>
-
